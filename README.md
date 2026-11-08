@@ -47,6 +47,8 @@ flowchart TB
 
 The frontend never implements `/slots` or `/bookings`. The backend never serves the Next.js app.
 
+The store uses parameterized SQL (`pg` `$1` placeholders, SQLite `?`) on purpose: this API is small, and bound queries are enough. If the app grew (more tables, more writes, more teams), we would add an ORM such as Prisma or Drizzle — that is the usual next step, not a missing piece here.
+
 Look and the agent workflow (spec → rules → tests → `/review`) are in [DESIGN.md](DESIGN.md).
 
 ---

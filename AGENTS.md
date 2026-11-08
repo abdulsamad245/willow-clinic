@@ -10,7 +10,7 @@ Follow `spec/openapi.json` exactly.
 - Frontend and backend are two URLs. The UI calls `NEXT_PUBLIC_API_BASE`.
 - `packages/shared/` holds types and Zod. Split by file (`slots.ts`, `bookings.ts`, `forms.ts`); `index.ts` only re-exports. Do not grow a god `index.ts`. The backend must import those contract types from `@willow/shared`, not duplicate them.
 - Database schema lives in `backend/src/infrastructure/migrations/`. Add a new numbered `.sql` file; do not edit applied migrations.
-- `Store` is async. Postgres when `DATABASE_URL` is set; SQLite otherwise.
+- `Store` is async. Postgres when `DATABASE_URL` is set; SQLite otherwise. Parameterized SQL (`pg` `$1`, SQLite `?`) is intentional at this size. An ORM (Prisma/Drizzle) is the usual step if the schema grows; do not add one now.
 - `npm test` is unit tests plus SQLite HTTP e2e. `npm run test:postgres` is the same HTTP contract against Testcontainers Postgres (needs Docker). Local Postgres for `npm run dev` is `npm run db` (`compose.yaml`).
 
 ## Contract
