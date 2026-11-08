@@ -96,7 +96,7 @@ Copy the `DATABASE_URL` line from `.env.example` into a gitignored `.env`, then 
 npm test
 ```
 
-HTTP contract against SQLite in memory. Fast, no Docker. Does not read `backend/data`.
+Unit tests for email, booking fields, and cursor pagination, then the HTTP contract against SQLite in memory. Fast, no Docker. Does not read `backend/data`.
 
 ```bash
 npm run test:postgres
@@ -108,7 +108,7 @@ The same contract against a throwaway Postgres started by [Testcontainers](https
 |---|---|
 | `npm run db` | Long-lived Postgres so `npm run dev` can use `DATABASE_URL` |
 | `npm run test:postgres` | Prove the API against real Postgres, then throw the container away |
-| `npm test` | Fast SQLite contract, no Docker |
+| `npm test` | Unit tests + SQLite HTTP contract, no Docker |
 
 ---
 

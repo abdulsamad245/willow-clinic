@@ -31,7 +31,7 @@ Read `AGENTS.md` and `spec/openapi.json` before writing code. Do not invent rout
 
 1. Point at the spec behaviour you are changing.
 2. Implement in the owning folder (`backend/` or `frontend/`).
-3. From the repo root run `npm test`. If you touched SQL or `Store`, also run `npm run test:postgres` (needs Docker).
+3. From the repo root run `npm test` (unit + SQLite HTTP). If you touched SQL or `Store`, also run `npm run test:postgres` (needs Docker).
 4. If a test fails, fix from the failure output. Do not claim done from the UI alone.
 5. After a behaviour change, run `/review` (Bugbot) or `/review-security`.
 6. Do not commit secrets (`.env`, keys, credentials).

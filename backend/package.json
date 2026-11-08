@@ -7,7 +7,8 @@
     "dev": "tsx watch src/main.ts",
     "start": "tsx src/main.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "tsx --test --test-concurrency=1 test/e2e/api.e2e.test.ts",
+    "test:unit": "tsx --test --test-concurrency=1 ../packages/shared/src/email.test.ts ../packages/shared/src/bookings.test.ts test/unit/pagination.test.ts",
+    "test": "tsx --test --test-concurrency=1 ../packages/shared/src/email.test.ts ../packages/shared/src/bookings.test.ts test/unit/pagination.test.ts test/e2e/api.e2e.test.ts",
     "test:postgres": "tsx --test --test-concurrency=1 test/e2e/postgres.e2e.test.ts",
     "test:live": "tsx --test --test-concurrency=1 test/e2e/live.e2e.test.ts"
   },
