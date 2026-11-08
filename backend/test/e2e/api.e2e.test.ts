@@ -89,7 +89,7 @@ before(async () => {
 
 after(async () => {
   await new Promise<void>((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
-  store.close();
+  await store.close();
 });
 
 beforeEach(async () => {
@@ -121,6 +121,19 @@ describe("e2e level 1", () => {
     assert.equal(res.status, 200);
     const body = (await res.json()) as { service?: string };
     assert.equal(body.service, "willow-clinic-api");
+  });
+
+  it("serves Swagger UI and the OpenAPI document without a key", async () => {
+    const docs = await fetch(`${baseUrl}/docs/`);
+    assert.equal(docs.status, 200);
+    const html = await docs.text();
+    assert.match(html, /swagger/i);
+
+    const spec = await fetch(`${baseUrl}/openapi.json`);
+    assert.equal(spec.status, 200);
+    const body = (await spec.json()) as { openapi?: string; servers?: { url: string }[] };
+    assert.equal(body.openapi, "3.0.3");
+    assert.equal(body.servers?.[0]?.url, baseUrl);
   });
 
   it("lists slots earliest start first, with availability", async () => {
@@ -377,7 +390,7 @@ describe("e2e persistence", () => {
     });
     const booking = (await createdRes.json()) as { id: string };
     await new Promise<void>((resolve, reject) => fileServer.close((err) => (err ? reject(err) : resolve())));
-    first.close();
+    await first.close();
 
     const second = new SqliteStore(path);
     const app2 = createApp({ store: second, apiKey: API_KEY });
@@ -391,7 +404,7 @@ describe("e2e persistence", () => {
     const data = (await fetched.json()) as { email: string };
     assert.equal(data.email, "ada@example.com");
     await new Promise<void>((resolve, reject) => server2.close((err) => (err ? reject(err) : resolve())));
-    second.close();
+    await second.close();
     rmSync(dir, { recursive: true, force: true });
   });
 });

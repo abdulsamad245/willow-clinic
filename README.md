@@ -18,7 +18,7 @@ flowchart LR
   user[Browser]
   web[Frontend · Next.js]
   api[Backend · Express]
-  db[(SQLite)]
+  db[(Postgres or SQLite)]
 
   user -->|page URL| web
   web -->|"JSON + X-API-Key"| api
@@ -36,7 +36,7 @@ flowchart TB
   subgraph backend["backend/"]
     http[Routes]
     svc[Booking service]
-    store[Store]
+    store[Store · Postgres or SQLite]
   end
 
   ui --> zod
@@ -66,13 +66,15 @@ npm run dev
 
 API: [http://localhost:3001](http://localhost:3001) (set `PORT=3001` if you use the `.env.example`)
 
+Docs (Try it out): [http://localhost:3001/docs](http://localhost:3001/docs) — Authorize with `X-API-Key` from `.env.example`.
+
 ```bash
 npm run dev:frontend
 ```
 
 Page: [http://localhost:3000](http://localhost:3000)
 
-The UI reads `NEXT_PUBLIC_API_BASE` (default `http://127.0.0.1:3001`) and loads the key from `/config.json` on the API.
+The UI reads `NEXT_PUBLIC_API_BASE` from env and loads the key from `/config.json` on the API.
 
 ---
 
@@ -103,6 +105,16 @@ HTTP checks against the **backend** only.
 
 ---
 
+## Database
+
+The API talks to a `Store`. Set `DATABASE_URL` and the process uses Postgres. Leave it unset and it uses SQLite at `DB_PATH`.
+
+Tests always open SQLite (`:memory:` or a temp file). That keeps CI off a database service and still covers the HTTP contract. Postgres is the hosted choice because SQLite on a typical PaaS disk does not survive deploys, and concurrent bookings need real locking.
+
+Request logs (method, URL, status, `X-Request-Id`) go to stdout via Pino. `/health` and `/docs` are not logged.
+
+---
+
 ## Config
 
 **Backend**
@@ -111,8 +123,10 @@ HTTP checks against the **backend** only.
 |---|---|
 | `PORT` | `3000` (use `3001` locally so the UI can use `3000`) |
 | `API_KEY` | from `.env.example` |
-| `DB_PATH` | `./data/clinic.db` |
+| `DB_PATH` | `./data/clinic.db` (used when `DATABASE_URL` is unset) |
+| `DATABASE_URL` | empty — set this for Postgres; tests always use SQLite |
 | `FRONTEND_ORIGIN` | `*` |
+| `LOG_LEVEL` | `info` (`silent` during `npm test`) |
 
 **Frontend**
 

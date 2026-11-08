@@ -2,6 +2,7 @@ export type AppConfig = {
   port: number;
   apiKey: string;
   dbPath: string;
+  databaseUrl: string;
 };
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
@@ -9,5 +10,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     port: Number(env.PORT) || 3001,
     apiKey: env.API_KEY || "koya_c4_willow_9e2b7f4a",
     dbPath: env.DB_PATH || "./data/clinic.db",
+    databaseUrl: env.DATABASE_URL?.trim() ?? "",
   };
 }

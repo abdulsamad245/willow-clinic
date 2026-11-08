@@ -2,19 +2,19 @@ import type { Booking, IdempotencyRecord, Slot, SlotWithAvailability } from "../
 import type { Cursor } from "../shared/pagination.js";
 
 export type Store = {
-  reset(slots: Slot[]): void;
-  listSlots(provider?: string): SlotWithAvailability[];
-  getSlot(id: string): Slot | null;
-  slotCount(): number;
-  getBooking(id: string): Booking | null;
-  findConfirmedBooking(slotId: string): { id: string } | null;
-  insertBooking(booking: Booking): void;
-  cancelBooking(id: string): void;
-  listBookings(email: string, limitPlusOne: number, cursor?: Cursor): Booking[];
-  getIdempotency(key: string): IdempotencyRecord | null;
-  saveIdempotency(key: string, bodyHash: string, status: number, body: unknown): void;
-  countRecentAttempts(email: string, sinceMs: number): number[];
-  recordAttempt(email: string, attemptedAt: number): void;
-  transact<T>(fn: () => T): T;
-  close(): void;
+  reset(slots: Slot[]): Promise<void>;
+  listSlots(provider?: string): Promise<SlotWithAvailability[]>;
+  getSlot(id: string): Promise<Slot | null>;
+  slotCount(): Promise<number>;
+  getBooking(id: string): Promise<Booking | null>;
+  findConfirmedBooking(slotId: string): Promise<{ id: string } | null>;
+  insertBooking(booking: Booking): Promise<void>;
+  cancelBooking(id: string): Promise<void>;
+  listBookings(email: string, limitPlusOne: number, cursor?: Cursor): Promise<Booking[]>;
+  getIdempotency(key: string): Promise<IdempotencyRecord | null>;
+  saveIdempotency(key: string, bodyHash: string, status: number, body: unknown): Promise<void>;
+  countRecentAttempts(email: string, sinceMs: number): Promise<number[]>;
+  recordAttempt(email: string, attemptedAt: number): Promise<void>;
+  transact<T>(fn: () => Promise<T>): Promise<T>;
+  close(): Promise<void> | void;
 };

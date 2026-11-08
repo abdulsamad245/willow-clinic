@@ -3,6 +3,7 @@ import { dirname } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import type { Cursor } from "../shared/pagination.js";
 import type { Booking, BookingStatus, IdempotencyRecord, Slot, SlotWithAvailability } from "../shared/types.js";
+import { migrate } from "./migrate.js";
 import type { Store } from "./store.js";
 
 type SlotRow = {
@@ -44,52 +45,15 @@ export class SqliteStore implements Store {
     this.db.exec("PRAGMA journal_mode = WAL");
     this.db.exec("PRAGMA busy_timeout = 5000");
     this.db.exec("PRAGMA foreign_keys = ON");
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS slots (
-        id TEXT PRIMARY KEY,
-        provider TEXT NOT NULL,
-        start TEXT NOT NULL,
-        "end" TEXT NOT NULL
-      );
-
-      CREATE TABLE IF NOT EXISTS bookings (
-        id TEXT PRIMARY KEY,
-        slot_id TEXT NOT NULL,
-        name TEXT NOT NULL,
-        email TEXT NOT NULL,
-        status TEXT NOT NULL CHECK (status IN ('confirmed', 'cancelled')),
-        created_at TEXT NOT NULL
-      );
-
-      CREATE UNIQUE INDEX IF NOT EXISTS one_confirmed_per_slot
-        ON bookings(slot_id) WHERE status = 'confirmed';
-
-      CREATE INDEX IF NOT EXISTS bookings_email_created
-        ON bookings(email, created_at, id);
-
-      CREATE TABLE IF NOT EXISTS idempotency_keys (
-        key TEXT PRIMARY KEY,
-        body_hash TEXT NOT NULL,
-        status_code INTEGER NOT NULL,
-        response TEXT NOT NULL
-      );
-
-      CREATE TABLE IF NOT EXISTS rate_attempts (
-        email TEXT NOT NULL,
-        attempted_at INTEGER NOT NULL
-      );
-
-      CREATE INDEX IF NOT EXISTS rate_attempts_email_time
-        ON rate_attempts(email, attempted_at);
-    `);
+    migrate(this.db);
   }
 
-  transact<T>(fn: () => T): T {
+  async transact<T>(fn: () => Promise<T>): Promise<T> {
     let lastError: unknown;
     for (let attempt = 0; attempt < 8; attempt += 1) {
       try {
         this.db.exec("BEGIN IMMEDIATE");
-        const result = fn();
+        const result = await fn();
         this.db.exec("COMMIT");
         return result;
       } catch (err) {
@@ -110,8 +74,8 @@ export class SqliteStore implements Store {
     throw lastError;
   }
 
-  reset(slots: Slot[]): void {
-    this.transact(() => {
+  async reset(slots: Slot[]): Promise<void> {
+    await this.transact(async () => {
       this.db.exec("DELETE FROM bookings");
       this.db.exec("DELETE FROM slots");
       this.db.exec("DELETE FROM idempotency_keys");
@@ -125,7 +89,7 @@ export class SqliteStore implements Store {
     });
   }
 
-  listSlots(provider?: string): SlotWithAvailability[] {
+  async listSlots(provider?: string): Promise<SlotWithAvailability[]> {
     const rows = provider
       ? (this.db
           .prepare(
@@ -158,7 +122,7 @@ export class SqliteStore implements Store {
     }));
   }
 
-  getSlot(id: string): Slot | null {
+  async getSlot(id: string): Promise<Slot | null> {
     const row = this.db
       .prepare(`SELECT id, provider, start, "end" AS end_time FROM slots WHERE id = ?`)
       .get(id) as Omit<SlotRow, "taken"> | undefined;
@@ -166,24 +130,24 @@ export class SqliteStore implements Store {
     return { id: row.id, provider: row.provider, start: row.start, end: row.end_time };
   }
 
-  slotCount(): number {
+  async slotCount(): Promise<number> {
     const row = this.db.prepare("SELECT COUNT(*) AS n FROM slots").get() as { n: number | bigint };
     return Number(row.n);
   }
 
-  getBooking(id: string): Booking | null {
+  async getBooking(id: string): Promise<Booking | null> {
     const row = this.db.prepare("SELECT * FROM bookings WHERE id = ?").get(id) as BookingRow | undefined;
     return row ? toBooking(row) : null;
   }
 
-  findConfirmedBooking(slotId: string): { id: string } | null {
+  async findConfirmedBooking(slotId: string): Promise<{ id: string } | null> {
     const row = this.db
       .prepare(`SELECT id FROM bookings WHERE slot_id = ? AND status = 'confirmed'`)
       .get(slotId) as { id: string } | undefined;
     return row ?? null;
   }
 
-  insertBooking(booking: Booking): void {
+  async insertBooking(booking: Booking): Promise<void> {
     this.db
       .prepare(
         `INSERT INTO bookings (id, slot_id, name, email, status, created_at)
@@ -192,11 +156,11 @@ export class SqliteStore implements Store {
       .run(booking.id, booking.slot_id, booking.name, booking.email, booking.status, booking.created_at);
   }
 
-  cancelBooking(id: string): void {
+  async cancelBooking(id: string): Promise<void> {
     this.db.prepare(`UPDATE bookings SET status = 'cancelled' WHERE id = ?`).run(id);
   }
 
-  listBookings(email: string, limitPlusOne: number, cursor?: Cursor): Booking[] {
+  async listBookings(email: string, limitPlusOne: number, cursor?: Cursor): Promise<Booking[]> {
     const rows = cursor
       ? (this.db
           .prepare(
@@ -218,14 +182,14 @@ export class SqliteStore implements Store {
     return rows.map(toBooking);
   }
 
-  getIdempotency(key: string): IdempotencyRecord | null {
+  async getIdempotency(key: string): Promise<IdempotencyRecord | null> {
     const row = this.db
       .prepare("SELECT body_hash, status_code, response FROM idempotency_keys WHERE key = ?")
       .get(key) as IdempotencyRecord | undefined;
     return row ?? null;
   }
 
-  saveIdempotency(key: string, bodyHash: string, status: number, body: unknown): void {
+  async saveIdempotency(key: string, bodyHash: string, status: number, body: unknown): Promise<void> {
     this.db
       .prepare(
         `INSERT OR IGNORE INTO idempotency_keys (key, body_hash, status_code, response)
@@ -234,7 +198,7 @@ export class SqliteStore implements Store {
       .run(key, bodyHash, status, JSON.stringify(body));
   }
 
-  countRecentAttempts(email: string, sinceMs: number): number[] {
+  async countRecentAttempts(email: string, sinceMs: number): Promise<number[]> {
     const rows = this.db
       .prepare(
         `SELECT attempted_at FROM rate_attempts
@@ -245,7 +209,7 @@ export class SqliteStore implements Store {
     return rows.map((row) => Number(row.attempted_at));
   }
 
-  recordAttempt(email: string, attemptedAt: number): void {
+  async recordAttempt(email: string, attemptedAt: number): Promise<void> {
     this.db.prepare("INSERT INTO rate_attempts (email, attempted_at) VALUES (?, ?)").run(email, attemptedAt);
   }
 

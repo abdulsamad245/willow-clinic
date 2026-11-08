@@ -34,8 +34,8 @@ export function demoSlots(): Slot[] {
   return slots;
 }
 
-export function seedIfEmpty(store: Store): boolean {
-  if (store.slotCount() > 0) return false;
-  store.reset(demoSlots());
+export async function seedIfEmpty(store: Store): Promise<boolean> {
+  if ((await store.slotCount()) > 0) return false;
+  await store.reset(demoSlots());
   return true;
 }

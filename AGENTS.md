@@ -8,13 +8,15 @@ Follow `spec/openapi.json` exactly.
 - `frontend/` is Next.js UI only. Do not add Route Handlers for the spec.
 - Frontend and backend are two URLs. The UI calls `NEXT_PUBLIC_API_BASE`.
 - `packages/shared/` holds types and Zod schemas used by both.
+- Database schema lives in `backend/src/infrastructure/migrations/`. Add a new numbered `.sql` file; do not edit applied migrations.
+- `Store` is async. Postgres when `DATABASE_URL` is set; SQLite otherwise. Tests use SQLite (`:memory:` / a temp file).
 
 ## Contract
 
 - Errors are `{ "error": "<message>" }`.
 - Do not prefix routes with `/api`.
 - Do not change status codes to look more RESTful.
-- `X-API-Key` on spec routes; the page and `/health` stay public.
+- `X-API-Key` on spec routes; `/`, `/health`, `/docs`, and `/openapi.json` stay public.
 - Double-booking is prevented by a partial unique index, not only an `if`.
 - `GET /bookings` uses cursor pagination, not page numbers.
 - Rate limit is per email (5 / minute, failures included), not per IP.

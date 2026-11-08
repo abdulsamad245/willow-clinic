@@ -12,5 +12,9 @@ services:
         value: koya_c4_willow_9e2b7f4a
       - key: DB_PATH
         value: /opt/render/project/src/data/clinic.db
+      - key: DATABASE_URL
+        sync: false
       - key: FRONTEND_ORIGIN
         value: "*"
+      - key: LOG_LEVEL
+        value: info

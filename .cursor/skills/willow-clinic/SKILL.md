@@ -13,6 +13,8 @@ Read `AGENTS.md` and `spec/openapi.json` before writing code. Do not invent rout
 - `frontend/` is Next.js UI only. No Route Handlers for those paths.
 - Two hosts. UI calls `NEXT_PUBLIC_API_BASE` with `X-API-Key`.
 - Shared types and Zod live in `packages/shared/`. Backend validation is the source of truth.
+- Schema changes go in `backend/src/infrastructure/migrations/` as a new numbered `.sql` file.
+- The running API uses Postgres when `DATABASE_URL` is set. Tests stay on SQLite. Keep `Store` async.
 
 ## Contract
 
