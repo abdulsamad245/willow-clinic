@@ -1,7 +1,8 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import pg from "pg";
+import { BookingStatus } from "@willow/shared";
 import type { Cursor } from "../shared/pagination.js";
-import type { Booking, BookingStatus, IdempotencyRecord, Slot, SlotWithAvailability } from "../shared/types.js";
+import type { Booking, IdempotencyRecord, Slot, SlotWithAvailability } from "../shared/types.js";
 import { migratePostgres } from "./migrate.js";
 import type { Store } from "./store.js";
 
@@ -96,7 +97,7 @@ export class PostgresStore implements Store {
                         CASE WHEN b.id IS NULL THEN 0 ELSE 1 END AS taken
                  FROM slots s
                  LEFT JOIN bookings b
-                   ON b.slot_id = s.id AND b.status = 'confirmed'
+                   ON b.slot_id = s.id AND b.status = '${BookingStatus.CONFIRMED}'
                  ${provider ? "WHERE s.provider = $1" : ""}
                  ORDER BY s.start ASC, s.id ASC`;
     const result = provider ? await this.db().query(sql, [provider]) : await this.db().query(sql);
@@ -132,7 +133,7 @@ export class PostgresStore implements Store {
 
   async findConfirmedBooking(slotId: string): Promise<{ id: string } | null> {
     const result = await this.db().query(
-      `SELECT id FROM bookings WHERE slot_id = $1 AND status = 'confirmed'`,
+      `SELECT id FROM bookings WHERE slot_id = $1 AND status = '${BookingStatus.CONFIRMED}'`,
       [slotId]
     );
     return (result.rows[0] as { id: string } | undefined) ?? null;
@@ -147,7 +148,7 @@ export class PostgresStore implements Store {
   }
 
   async cancelBooking(id: string): Promise<void> {
-    await this.db().query(`UPDATE bookings SET status = 'cancelled' WHERE id = $1`, [id]);
+    await this.db().query(`UPDATE bookings SET status = '${BookingStatus.CANCELLED}' WHERE id = $1`, [id]);
   }
 
   async listBookings(email: string, limitPlusOne: number, cursor?: Cursor): Promise<Booking[]> {

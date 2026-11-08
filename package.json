@@ -13,6 +13,9 @@
     "start": "npm run start -w backend",
     "start:frontend": "npm run start -w frontend",
     "test": "npm test -w backend",
+    "test:postgres": "npm run test:postgres -w backend",
+    "db": "docker compose up -d",
+    "db:down": "docker compose down",
     "typecheck": "npm run typecheck -w backend",
     "build": "npm run build -w frontend",
     "prepare": "husky"

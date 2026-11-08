@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { bookingFieldError, parseBookingBody } from "@willow/shared";
+import { BookingStatus, bookingFieldError, parseBookingBody } from "@willow/shared";
 import { sha256 } from "../../shared/crypto.js";
 import { fail, HttpStatus, ok } from "../../shared/http.js";
 import { decodeCursor, encodeCursor, parseLimit } from "../../shared/pagination.js";
@@ -87,7 +87,7 @@ export class BookingService {
         slot_id: slotId,
         name,
         email: emailNorm,
-        status: "confirmed",
+        status: BookingStatus.CONFIRMED,
         created_at: now.toISOString(),
       };
 
@@ -114,9 +114,9 @@ export class BookingService {
     return this.store.transact(async () => {
       const booking = await this.store.getBooking(id);
       if (!booking) return fail(HttpStatus.NOT_FOUND, "no booking with that id");
-      if (booking.status === "cancelled") return fail(HttpStatus.CONFLICT, "already cancelled");
+      if (booking.status === BookingStatus.CANCELLED) return fail(HttpStatus.CONFLICT, "already cancelled");
       await this.store.cancelBooking(id);
-      return ok(HttpStatus.OK, { ...booking, status: "cancelled" as const });
+      return ok(HttpStatus.OK, { ...booking, status: BookingStatus.CANCELLED });
     });
   }
 

@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS idempotency_keys (
 
 CREATE TABLE IF NOT EXISTS rate_attempts (
   email TEXT NOT NULL,
-  attempted_at INTEGER NOT NULL
+  attempted_at BIGINT NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS rate_attempts_email_time

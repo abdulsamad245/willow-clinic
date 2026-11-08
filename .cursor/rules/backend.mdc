@@ -6,6 +6,6 @@ alwaysApply: false
 
 # Backend
 
-Implement `spec/openapi.json` exactly. Keep SQL in `infrastructure/`, rules in `modules/bookings`, HTTP in routes. `Store` is async. Postgres when `DATABASE_URL` is set; SQLite for local fallback and tests.
+Implement `spec/openapi.json` exactly. Keep SQL in `infrastructure/`, rules in `modules/`, public HTTP in `http/`. `Store` is async. Postgres when `DATABASE_URL` is set; SQLite for `npm test`. `npm run test:postgres` needs Docker.
 
-Return spec status codes (401, 400, 404, 409, 422, 429, 201). Never trust the frontend. Use parameterized queries. Unique confirmed booking per slot.
+Return spec status codes (401, 400, 404, 409, 422, 429, 201). Never wrap `{ success, data }`. Never trust the frontend. Use parameterized queries. Unique confirmed booking per slot.

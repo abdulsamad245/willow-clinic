@@ -12,7 +12,7 @@ spec/openapi.json  →  AGENTS.md + rules + skill  →  implement  →  npm test
 |---|---|
 | Spec | `spec/openapi.json` — do not restyle paths or status codes |
 | Repo law | `AGENTS.md`, `.cursor/rules/*.mdc`, `.cursor/skills/willow-clinic/SKILL.md` |
-| Prove | `npm test` — HTTP e2e against Express, not mocks |
+| Prove | `npm test` (SQLite) then `npm run test:postgres` (Testcontainers) |
 | Review | `/review` (Bugbot) or `/review-security` after a behaviour change |
 
 Do not commit secrets, change spec status codes, or put Route Handlers in Next.js.

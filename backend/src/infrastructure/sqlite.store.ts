@@ -1,8 +1,9 @@
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { DatabaseSync } from "node:sqlite";
+import { BookingStatus } from "@willow/shared";
 import type { Cursor } from "../shared/pagination.js";
-import type { Booking, BookingStatus, IdempotencyRecord, Slot, SlotWithAvailability } from "../shared/types.js";
+import type { Booking, IdempotencyRecord, Slot, SlotWithAvailability } from "../shared/types.js";
 import { migrate } from "./migrate.js";
 import type { Store } from "./store.js";
 
@@ -97,7 +98,7 @@ export class SqliteStore implements Store {
                     CASE WHEN b.id IS NULL THEN 0 ELSE 1 END AS taken
              FROM slots s
              LEFT JOIN bookings b
-               ON b.slot_id = s.id AND b.status = 'confirmed'
+               ON b.slot_id = s.id AND b.status = '${BookingStatus.CONFIRMED}'
              WHERE s.provider = ?
              ORDER BY s.start ASC, s.id ASC`
           )
@@ -108,7 +109,7 @@ export class SqliteStore implements Store {
                     CASE WHEN b.id IS NULL THEN 0 ELSE 1 END AS taken
              FROM slots s
              LEFT JOIN bookings b
-               ON b.slot_id = s.id AND b.status = 'confirmed'
+               ON b.slot_id = s.id AND b.status = '${BookingStatus.CONFIRMED}'
              ORDER BY s.start ASC, s.id ASC`
           )
           .all() as SlotRow[]);
@@ -142,7 +143,7 @@ export class SqliteStore implements Store {
 
   async findConfirmedBooking(slotId: string): Promise<{ id: string } | null> {
     const row = this.db
-      .prepare(`SELECT id FROM bookings WHERE slot_id = ? AND status = 'confirmed'`)
+      .prepare(`SELECT id FROM bookings WHERE slot_id = ? AND status = '${BookingStatus.CONFIRMED}'`)
       .get(slotId) as { id: string } | undefined;
     return row ?? null;
   }
@@ -157,7 +158,7 @@ export class SqliteStore implements Store {
   }
 
   async cancelBooking(id: string): Promise<void> {
-    this.db.prepare(`UPDATE bookings SET status = 'cancelled' WHERE id = ?`).run(id);
+    this.db.prepare(`UPDATE bookings SET status = '${BookingStatus.CANCELLED}' WHERE id = ?`).run(id);
   }
 
   async listBookings(email: string, limitPlusOne: number, cursor?: Cursor): Promise<Booking[]> {

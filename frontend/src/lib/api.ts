@@ -24,7 +24,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const error = new Error((data as { error?: string }).error || `Request failed (${res.status})`) as ApiError;
+    const error = new Error((data as { error?: string }).error || "Something went wrong. Please try again.") as ApiError;
     error.status = res.status;
     throw error;
   }

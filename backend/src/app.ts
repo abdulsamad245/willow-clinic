@@ -11,8 +11,8 @@ import { BookingService } from "./modules/bookings/bookings.service.js";
 import { bookingsRouter } from "./modules/bookings/bookings.routes.js";
 import { resetRouter } from "./modules/reset/reset.routes.js";
 import { slotsRouter } from "./modules/slots/slots.routes.js";
-import { mountDocs } from "./web/docs.js";
-import { mountPublicSite } from "./web/static.js";
+import { mountDocs } from "./http/docs.js";
+import { mountPublicRoutes } from "./http/public.js";
 
 export type CreateAppOptions = {
   store: Store;
@@ -40,8 +40,8 @@ export function createApp({ store, apiKey, clock = () => new Date() }: CreateApp
         if (res.statusCode >= 400) return "warn";
         return "info";
       },
-      customSuccessMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
-      customErrorMessage: (req, res, err) => `${req.method} ${req.url} ${res.statusCode} ${err.message}`,
+      customSuccessMessage: (req, res) => `${req.method} ${req.originalUrl ?? req.url} ${res.statusCode}`,
+      customErrorMessage: (req, res, err) => `${req.method} ${req.originalUrl ?? req.url} ${res.statusCode} ${err.message}`,
       autoLogging: {
         ignore: (req) => {
           const url = req.url ?? "";
@@ -61,7 +61,7 @@ export function createApp({ store, apiKey, clock = () => new Date() }: CreateApp
   );
   app.use(invalidJson);
 
-  mountPublicSite(app, apiKey);
+  mountPublicRoutes(app, apiKey);
   mountDocs(app);
   app.use(requireApiKey(apiKey));
 
