@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+coverage/
+*.tsbuildinfo
+frontend/.next/
+frontend/out/
+backend/dist/
+
+# Local data and secrets
+data/
+*.db
+*.sqlite
+.env
+.env.*
+!.env.example
+!.env*.example
+!.env.development
+*.db-wal
+*.db-shm
+
+# Logs and OS
+*.log
+.DS_Store
+Thumbs.db

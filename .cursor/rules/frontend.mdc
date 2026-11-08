@@ -1,0 +1,9 @@
+---
+description: Frontend is UI only
+globs: frontend/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Frontend
+
+Next.js must not implement `/slots`, `/bookings`, or `/reset`. Call the backend at `NEXT_PUBLIC_API_BASE` with `fetch`. Validate forms with shared Zod for UX; the API still decides. Keep the UI responsive and labelled.

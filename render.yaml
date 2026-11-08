@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: willow-clinic-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: API_KEY
+        value: koya_c4_willow_9e2b7f4a
+      - key: DB_PATH
+        value: /opt/render/project/src/data/clinic.db
+      - key: FRONTEND_ORIGIN
+        value: "*"

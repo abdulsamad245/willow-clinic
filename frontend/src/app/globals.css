@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  background-color: #f1ebe0;
+  background-image: radial-gradient(ellipse 900px 480px at 8% -8%, #dce8d6, transparent 58%);
+  color: #1c2418;
+}
+
+body {
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+}
+
+@keyframes willow-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton {
+  background: #e4dccf;
+  animation: willow-pulse 1.2s ease-in-out infinite;
+}

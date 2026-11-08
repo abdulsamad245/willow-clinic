@@ -1,0 +1,28 @@
+{
+  "name": "willow-clinic",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "start": "npm run start -w backend",
+    "start:frontend": "npm run start -w frontend",
+    "test": "npm test -w backend",
+    "typecheck": "npm run typecheck -w backend",
+    "build": "npm run build -w frontend",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "husky": "^9.1.7"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
