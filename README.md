@@ -78,6 +78,14 @@ Page: [http://localhost:3000](http://localhost:3000)
 
 The UI reads `NEXT_PUBLIC_API_BASE` from env and loads the key from `/config.json` on the API.
 
+`npm run dev` loads the sample timetable (Dr Ade, Dr Nkechi, Dr Tunde) if the database has no slots. To replace it later:
+
+```bash
+npm run seed
+```
+
+That is the same reset as `POST /reset` with the demo slots: it clears bookings and writes the sample timetable, then books 12 slots for `ada@example.com` so **Load more** (cursor paging) works on the page. Default page size is 10. It uses SQLite (`backend/data`) unless `DATABASE_URL` is set.
+
 ### Postgres locally
 
 `npm run dev` uses SQLite until `DATABASE_URL` is set. That writes `backend/data/clinic.db` (gitignored). It is only the local SQLite file. Tests do not use it.

@@ -22,7 +22,7 @@ export function Field({ label, error, id, className, ...props }: FieldProps) {
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errId : undefined}
         {...props}
-        className={`border bg-[#fffdf8] px-3 py-2.5 text-base outline-none ring-leaf/25 focus:ring-2 ${
+        className={`min-h-11 border bg-[#fffdf8] px-3 py-2.5 text-base text-ink placeholder:text-stone-400 outline-none ${
           error ? "border-red-700" : "border-[#cfc6b8] focus:border-leaf"
         } ${className ?? ""}`}
       />

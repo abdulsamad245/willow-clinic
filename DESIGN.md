@@ -42,5 +42,5 @@ Do not commit secrets, change spec status codes, or put Route Handlers in Next.j
 
 - Header: 5px leaf bar, clinic name.
 - Slot board: doctor filter, day chips, Grid/List.
-- Book sheet: name, email, confirmation id.
-- Lookup: booking id or email (cursor paging under the hood).
+- Book sheet: name, email, appointment, booked time, booking id.
+- Lookup: one search (booking id or email). Grid/List. Click a card to see booking details. The page chooses `GET /bookings/{id}` or `GET /bookings?email=` (cursor paging under the hood).

@@ -1,5 +1,11 @@
+import { randomUUID } from "node:crypto";
+import { BookingStatus } from "@willow/shared";
 import type { Store } from "../infrastructure/store.js";
 import type { Slot } from "../shared/types.js";
+
+export const DEMO_LOOKUP_EMAIL = "ada@example.com";
+export const DEMO_LOOKUP_NAME = "Ada Obi";
+const LOOKUP_PAGE_DEMO = 12;
 
 const PROVIDERS = ["Dr Ade", "Dr Nkechi", "Dr Tunde"];
 
@@ -34,8 +40,24 @@ export function demoSlots(): Slot[] {
   return slots;
 }
 
+export async function seed(store: Store): Promise<void> {
+  const slots = demoSlots();
+  await store.reset(slots);
+  const now = Date.UTC(2026, 10, 1, 8, 0, 0);
+  for (const [index, slot] of slots.slice(0, LOOKUP_PAGE_DEMO).entries()) {
+    await store.insertBooking({
+      id: randomUUID(),
+      slot_id: slot.id,
+      name: DEMO_LOOKUP_NAME,
+      email: DEMO_LOOKUP_EMAIL,
+      status: BookingStatus.CONFIRMED,
+      created_at: new Date(now + index * 1000).toISOString(),
+    });
+  }
+}
+
 export async function seedIfEmpty(store: Store): Promise<boolean> {
   if ((await store.slotCount()) > 0) return false;
-  await store.reset(demoSlots());
+  await seed(store);
   return true;
 }

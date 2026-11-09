@@ -12,6 +12,7 @@ Follow `spec/openapi.json` exactly.
 - Database schema lives in `backend/src/infrastructure/migrations/`. Add a new numbered `.sql` file; do not edit applied migrations.
 - `Store` is async. Postgres when `DATABASE_URL` is set; SQLite otherwise. Parameterized SQL (`pg` `$1`, SQLite `?`) is intentional at this size. An ORM (Prisma/Drizzle) is the usual step if the schema grows; do not add one now.
 - `npm test` is unit tests plus SQLite HTTP e2e. `npm run test:postgres` is the same HTTP contract against Testcontainers Postgres (needs Docker). Local Postgres for `npm run dev` is `npm run db` (`compose.yaml`).
+- `npm run seed` loads the sample timetable and 12 bookings for `ada@example.com` (so cursor paging can be tried). Startup still seeds only when the store is empty.
 
 ## Contract
 
@@ -29,6 +30,10 @@ Follow `spec/openapi.json` exactly.
 ## Validation
 
 Backend Zod/schemas are the source of truth. Frontend form checks are UX only.
+
+## Judgement
+
+Reuse shared types and services. Do not bolt on a feature that fights the layout. If it needs a new framework or a god `index.ts`, stop and say so. Prove refactors with `npm test`.
 
 ## Agent workflow
 

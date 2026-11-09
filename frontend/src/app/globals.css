@@ -23,3 +23,24 @@ body {
   background: #e4dccf;
   animation: willow-pulse 1.2s ease-in-out infinite;
 }
+
+@keyframes willow-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes willow-sheet {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+}
+
+.willow-overlay {
+  animation: willow-fade 200ms ease-out;
+}
+
+.willow-sheet {
+  animation: willow-sheet 280ms ease-out;
+}

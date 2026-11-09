@@ -5,7 +5,7 @@ const FROM_API: Record<string, string> = {
   "slot not found": "That time is no longer on the timetable. Please pick another slot.",
   "slot has already started": "That time has already passed. Please pick another slot.",
   "slot already booked": "That slot was just taken. Please pick another time.",
-  "no booking with that id": "We could not find a booking with that confirmation number.",
+  "no booking with that id": "We could not find a booking with that booking id.",
   "already cancelled": "This booking is already cancelled.",
   "too many attempts": "Please wait a minute before trying that email again.",
   "email is required": "Please enter the email used when you booked.",

@@ -22,6 +22,7 @@ function formatWhen(iso: string) {
 type BookSheetProps = {
   selected: SlotWithAvailability | null;
   ticket: Booking | null;
+  ticketSlot?: SlotWithAvailability;
   name: string;
   email: string;
   formErr: FormErrors;
@@ -42,6 +43,7 @@ type BookSheetProps = {
 export function BookSheet({
   selected,
   ticket,
+  ticketSlot,
   name,
   email,
   formErr,
@@ -61,10 +63,10 @@ export function BookSheet({
   return (
     <>
       {selected ? (
-        <div className="fixed inset-0 z-10 grid place-items-end bg-ink/40 p-0 sm:place-items-center sm:p-4">
+        <div className="willow-overlay fixed inset-0 z-10 grid place-items-end bg-ink/40 p-0 sm:place-items-center sm:p-4">
           <form
             onSubmit={onBook}
-            className="max-h-[100dvh] w-full overflow-y-auto border-t border-[#cfc6b8] bg-[#fffdf8] p-5 shadow-xl sm:max-h-none sm:max-w-md sm:border sm:p-6"
+            className="willow-sheet max-h-[100dvh] w-full overflow-y-auto border-t border-[#cfc6b8] bg-[#fffdf8] p-5 shadow-xl sm:max-h-none sm:max-w-md sm:border sm:p-6"
             noValidate
           >
             <p className="text-sm text-leaf">New booking</p>
@@ -118,24 +120,46 @@ export function BookSheet({
       ) : null}
 
       {ticket ? (
-        <div className="fixed inset-0 z-20 grid place-items-end bg-ink/40 p-0 sm:place-items-center sm:p-4">
-          <div className="w-full border-t border-[#cfc6b8] bg-[#fffdf8] p-5 shadow-xl sm:max-w-md sm:border sm:p-6">
+        <div className="willow-overlay fixed inset-0 z-20 grid place-items-end bg-ink/40 p-0 sm:place-items-center sm:p-4">
+          <div className="willow-sheet w-full border-t border-[#cfc6b8] bg-[#fffdf8] p-5 shadow-xl sm:max-w-md sm:border sm:p-6">
             <p className="text-sm text-leaf">Confirmed</p>
             <h3 className="font-serif text-2xl">You are booked.</h3>
             <dl className="mt-4 grid gap-3">
+              <div>
+                <dt className="text-xs uppercase text-stone-500">Appointment</dt>
+                <dd>
+                  {ticketSlot
+                    ? `${ticketSlot.provider} · ${formatWhen(ticketSlot.start)} – ${formatTime(ticketSlot.end)}`
+                    : ticket.slot_id}
+                </dd>
+              </div>
               <div>
                 <dt className="text-xs uppercase text-stone-500">Patient</dt>
                 <dd className="font-serif text-xl">{ticket.name}</dd>
               </div>
               <div>
+                <dt className="text-xs uppercase text-stone-500">Email</dt>
+                <dd className="break-all">{ticket.email}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase text-stone-500">Booked</dt>
+                <dd>{formatWhen(ticket.created_at)}</dd>
+              </div>
+              <div>
                 <dt className="text-xs uppercase text-stone-500">Booking id</dt>
-                <dd className="break-all font-mono text-sm">{ticket.id}</dd>
+                <dd className="mt-1 flex items-center gap-2">
+                  <span className="min-w-0 break-all font-mono text-sm">{ticket.id}</span>
+                  <button
+                    className="shrink-0 border border-[#cfc6b8] px-2.5 py-1.5 text-sm"
+                    type="button"
+                    onClick={() => void onCopyId(ticket.id)}
+                  >
+                    Copy
+                  </button>
+                </dd>
               </div>
             </dl>
-            <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row">
-              <button className="min-h-11 border border-[#cfc6b8] px-4" type="button" onClick={() => void onCopyId(ticket.id)}>
-                Copy id
-              </button>
+            <div className="mt-5 flex justify-end">
               <button className="min-h-11 bg-leaf px-4 font-semibold text-white" type="button" onClick={onCloseTicket}>
                 Done
               </button>

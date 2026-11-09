@@ -119,7 +119,7 @@ export function SlotBoard({
     <section>
       <h2 className="max-w-xl font-serif text-3xl font-semibold leading-tight sm:text-4xl">Pick a day, then a time</h2>
       <p className="mt-3 max-w-xl text-base text-stone-600 sm:text-lg">
-        One clinic day at a time. Book with Dr Ade, Dr Nkechi, or Dr Tunde and keep the confirmation number.
+        One clinic day at a time. Book with Dr Ade, Dr Nkechi, or Dr Tunde and keep the booking id.
       </p>
 
       <div className="mt-6 flex flex-col gap-4 sm:mt-8 sm:flex-row sm:items-end sm:justify-between">

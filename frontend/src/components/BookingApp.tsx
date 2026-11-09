@@ -1,6 +1,13 @@
 "use client";
 
-import { bookFormSchema, formErrors, lookupEmailSchema, lookupIdSchema, type FormErrors } from "@willow/shared";
+import {
+  bookFormSchema,
+  formErrors,
+  lookupEmailSchema,
+  lookupIdSchema,
+  lookupQuerySchema,
+  type FormErrors,
+} from "@willow/shared";
 import type { Booking, SlotWithAvailability } from "@willow/shared";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { BookSheet } from "@/components/BookSheet";
@@ -14,9 +21,15 @@ function dayKey(iso: string) {
   return iso.slice(0, 10);
 }
 
-export function BookingApp() {
+export function BookingApp({ initialView = "book" }: { initialView?: "book" | "lookup" }) {
   const { toast } = useToast();
-  const [view, setView] = useState<"book" | "lookup">("book");
+  const [view, setViewState] = useState<"book" | "lookup">(initialView);
+
+  function setView(next: "book" | "lookup") {
+    setViewState(next);
+    const url = next === "lookup" ? "/?view=lookup" : "/";
+    window.history.replaceState(null, "", url);
+  }
   const [slotView, setSlotView] = useState<"grid" | "list">("grid");
   const [slots, setSlots] = useState<SlotWithAvailability[]>([]);
   const [provider, setProvider] = useState("");
@@ -30,14 +43,13 @@ export function BookingApp() {
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [ticket, setTicket] = useState<Booking | null>(null);
-  const [lookupId, setLookupId] = useState("");
-  const [lookupEmail, setLookupEmail] = useState("");
+  const [lookupQuery, setLookupQuery] = useState("");
+  const [pagedEmail, setPagedEmail] = useState("");
   const [lookupResults, setLookupResults] = useState<Booking[]>([]);
-  const [idErr, setIdErr] = useState("");
-  const [emailErr, setEmailErr] = useState("");
+  const [lookupErr, setLookupErr] = useState("");
   const [lookupApiError, setLookupApiError] = useState("");
   const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const [lookupBusy, setLookupBusy] = useState<"id" | "email" | null>(null);
+  const [lookupBusy, setLookupBusy] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [lookedUp, setLookedUp] = useState(false);
@@ -155,63 +167,71 @@ export function BookingApp() {
     }
   }
 
-  async function onLookupId(event: FormEvent) {
+  async function onLookup(event: FormEvent) {
     event.preventDefault();
-    const parsed = lookupIdSchema.safeParse({ id: lookupId });
+    const parsed = lookupQuerySchema.safeParse({ query: lookupQuery });
     if (!parsed.success) {
-      setIdErr(formErrors(parsed.error).id ?? "Please paste the confirmation number from your booking.");
+      setLookupErr(formErrors(parsed.error).query ?? "Please enter a booking id or the email used when you booked.");
       return;
     }
-    setIdErr("");
+    const query = parsed.data.query;
+    setLookupErr("");
     setLookupApiError("");
-    setNextCursor(null);
-    setLookupBusy("id");
     setLookedUp(true);
+    setLookupBusy(true);
+
+    if (query.includes("@")) {
+      const emailParsed = lookupEmailSchema.safeParse({ email: query });
+      if (!emailParsed.success) {
+        setLookupBusy(false);
+        setLookupErr(formErrors(emailParsed.error).email ?? "Please enter the email used when you booked.");
+        return;
+      }
+      try {
+        const data = await listBookings(emailParsed.data.email);
+        setPagedEmail(emailParsed.data.email);
+        setLookupResults(data.bookings);
+        setNextCursor(data.next_cursor);
+        if (data.bookings.length === 0) {
+          setLookupApiError("We could not find any bookings for that email.");
+        }
+      } catch (err) {
+        const message = userMessage(err, "We could not list bookings for that email. Please try again.");
+        setLookupResults([]);
+        setNextCursor(null);
+        setPagedEmail("");
+        setLookupApiError(message);
+      } finally {
+        setLookupBusy(false);
+      }
+      return;
+    }
+
+    const idParsed = lookupIdSchema.safeParse({ id: query });
+    if (!idParsed.success) {
+      setLookupBusy(false);
+      setLookupErr(formErrors(idParsed.error).id ?? "Please paste the booking id.");
+      return;
+    }
+    setPagedEmail("");
+    setNextCursor(null);
     try {
-      const booking = await getBooking(parsed.data.id);
+      const booking = await getBooking(idParsed.data.id);
       setLookupResults([booking]);
     } catch (err) {
-      const message = userMessage(err, "We could not find a booking with that confirmation number.");
+      const message = userMessage(err, "We could not find a booking with that booking id.");
       setLookupResults([]);
       setLookupApiError(message);
     } finally {
-      setLookupBusy(null);
-    }
-  }
-
-  async function onLookupEmail(event: FormEvent) {
-    event.preventDefault();
-    const parsed = lookupEmailSchema.safeParse({ email: lookupEmail });
-    if (!parsed.success) {
-      setEmailErr(formErrors(parsed.error).email ?? "Please enter the email used when you booked.");
-      return;
-    }
-    setEmailErr("");
-    setLookupApiError("");
-    setLookupBusy("email");
-    setLookedUp(true);
-    try {
-      const data = await listBookings(parsed.data.email);
-      setLookupResults(data.bookings);
-      setNextCursor(data.next_cursor);
-      if (data.bookings.length === 0) {
-        setLookupApiError("We could not find any bookings for that email.");
-      }
-    } catch (err) {
-      const message = userMessage(err, "We could not list bookings for that email. Please try again.");
-      setLookupResults([]);
-      setNextCursor(null);
-      setLookupApiError(message);
-    } finally {
-      setLookupBusy(null);
+      setLookupBusy(false);
     }
   }
 
   async function onLoadMore() {
-    if (!nextCursor || loadingMore) return;
+    if (!nextCursor || !pagedEmail || loadingMore) return;
     setLoadingMore(true);
     try {
-      const data = await listBookings(lookupEmail, nextCursor);
+      const data = await listBookings(pagedEmail, nextCursor);
       setLookupResults((rows) => [...rows, ...data.bookings]);
       setNextCursor(data.next_cursor);
     } catch (err) {
@@ -240,9 +260,9 @@ export function BookingApp() {
   async function copyId(id: string) {
     try {
       await navigator.clipboard.writeText(id);
-      toast("Confirmation number copied.");
+      toast("Booking id copied.");
     } catch {
-      toast("We could not copy that confirmation number. Please copy it manually.", "error");
+      toast("We could not copy that booking id. Please copy it manually.", "error");
     }
   }
 
@@ -272,6 +292,37 @@ export function BookingApp() {
           </button>
         </nav>
       </header>
+      <nav className="mb-6 text-sm text-stone-500" aria-label="Breadcrumb">
+        <ol className="flex flex-wrap items-center gap-2">
+          <li>
+            <button type="button" className="hover:text-leaf" onClick={() => setView("book")}>
+              Home
+            </button>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            {view === "book" ? (
+              <span className="font-medium text-ink" aria-current="page">
+                Book
+              </span>
+            ) : (
+              <button type="button" className="hover:text-leaf" onClick={() => setView("book")}>
+                Book
+              </button>
+            )}
+          </li>
+          {view === "lookup" ? (
+            <>
+              <li aria-hidden="true">/</li>
+              <li>
+                <span className="font-medium text-ink" aria-current="page">
+                  Find a booking
+                </span>
+              </li>
+            </>
+          ) : null}
+        </ol>
+      </nav>
 
       {view === "book" ? (
         <SlotBoard
@@ -294,10 +345,8 @@ export function BookingApp() {
         />
       ) : (
         <LookupPanel
-          lookupId={lookupId}
-          lookupEmail={lookupEmail}
-          idErr={idErr}
-          emailErr={emailErr}
+          lookupQuery={lookupQuery}
+          lookupErr={lookupErr}
           lookupApiError={lookupApiError}
           nextCursor={nextCursor}
           lookupBusy={lookupBusy}
@@ -306,12 +355,9 @@ export function BookingApp() {
           lookedUp={lookedUp}
           lookupResults={lookupResults}
           slotById={slotById}
-          onLookupIdChange={setLookupId}
-          onLookupEmailChange={setLookupEmail}
-          onIdErr={setIdErr}
-          onEmailErr={setEmailErr}
-          onLookupId={onLookupId}
-          onLookupEmail={onLookupEmail}
+          onLookupQueryChange={setLookupQuery}
+          onLookupErr={setLookupErr}
+          onLookup={onLookup}
           onLoadMore={onLoadMore}
           onCancel={onCancel}
           onCopyId={copyId}
@@ -321,6 +367,7 @@ export function BookingApp() {
       <BookSheet
         selected={selected}
         ticket={ticket}
+        ticketSlot={ticket ? slotById.get(ticket.slot_id) : undefined}
         name={name}
         email={email}
         formErr={formErr}

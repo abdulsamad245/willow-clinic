@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isValidEmail } from "./email.js";
+import { isValidEmail } from "./email";
 
 export const BOOKING_STATUSES = ["confirmed", "cancelled"] as const;
 

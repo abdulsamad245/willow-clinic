@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isValidEmail } from "./email.js";
+import { isValidEmail } from "./email";
 
 export const bookFormSchema = z.object({
   name: z.string().trim().min(1, "Please enter your full name so it can appear on the confirmation."),
@@ -19,7 +19,11 @@ export const lookupEmailSchema = z.object({
 });
 
 export const lookupIdSchema = z.object({
-  id: z.string().trim().min(1, "Please paste the confirmation number from your booking."),
+  id: z.string().trim().min(1, "Please paste the booking id."),
+});
+
+export const lookupQuerySchema = z.object({
+  query: z.string().trim().min(1, "Please enter a booking id or the email used when you booked."),
 });
 
 export type FormErrors = Partial<Record<string, string>>;

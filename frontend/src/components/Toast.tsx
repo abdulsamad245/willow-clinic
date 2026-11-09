@@ -31,7 +31,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ toast }}>
       {children}
       <div
-        className="pointer-events-none fixed inset-x-0 bottom-6 z-[60] flex flex-col items-center gap-2 px-4"
+        id="willow-toasts"
+        className="pointer-events-none fixed inset-x-0 top-5 z-[60] flex flex-col items-center gap-2 px-4"
         aria-live="polite"
         aria-relevant="additions"
       >
@@ -39,8 +40,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <p
             key={item.id}
             role="status"
-            className={`pointer-events-auto w-full max-w-sm rounded-2xl px-4 py-3 text-sm font-medium shadow-lg ${
-              item.tone === "error" ? "bg-red-900 text-white" : "bg-ink text-white"
+            className={`willow-overlay pointer-events-auto w-full max-w-md border px-4 py-3 text-sm font-medium shadow-xl ${
+              item.tone === "error"
+                ? "border-red-900 bg-red-900 text-white"
+                : "border-ink bg-ink text-white"
             }`}
           >
             {item.message}

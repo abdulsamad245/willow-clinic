@@ -1,4 +1,4 @@
-export { resetBodySchema, slotSchema, type Slot, type SlotWithAvailability } from "./slots.js";
+export { resetBodySchema, slotSchema, type Slot, type SlotWithAvailability } from "./slots";
 export {
   BOOKING_STATUSES,
   BookingStatus,
@@ -6,13 +6,14 @@ export {
   bookingFieldError,
   bookingStatusSchema,
   parseBookingBody,
-} from "./bookings.js";
-export type { Booking, ErrorBody } from "./bookings.js";
-export { isValidEmail } from "./email.js";
+} from "./bookings";
+export type { Booking, ErrorBody } from "./bookings";
+export { isValidEmail } from "./email";
 export {
   bookFormSchema,
   formErrors,
   lookupEmailSchema,
   lookupIdSchema,
+  lookupQuerySchema,
   type FormErrors,
-} from "./forms.js";
+} from "./forms";

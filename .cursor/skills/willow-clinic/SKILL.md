@@ -15,7 +15,7 @@ Read `AGENTS.md` and `spec/openapi.json` before writing code. Do not invent rout
 - Two hosts. UI calls `NEXT_PUBLIC_API_BASE` with `X-API-Key`.
 - Shared types and Zod live in `packages/shared/` (`slots.ts`, `bookings.ts`, `forms.ts`, `email.ts`). `index.ts` re-exports only. Use `BookingStatus` and `isValidEmail` from there. Do not duplicate those types in the backend. Do not use TypeScript `enum`.
 - Schema changes go in `backend/src/infrastructure/migrations/` as a new numbered `.sql` file.
-- Postgres when `DATABASE_URL` is set. `npm test` is SQLite. `npm run test:postgres` uses Testcontainers (Docker). Local Postgres: `npm run db`. Keep `Store` async. Parameterized SQL is intentional at this size; do not add Prisma/Drizzle unless the schema grows.
+- Postgres when `DATABASE_URL` is set. `npm test` is SQLite. `npm run test:postgres` uses Testcontainers (Docker). Local Postgres: `npm run db`. `npm run seed` replaces the sample timetable and 12 bookings for `ada@example.com`. Keep `Store` async. Parameterized SQL is intentional at this size; do not add Prisma/Drizzle unless the schema grows.
 
 ## Contract
 
