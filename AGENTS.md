@@ -6,8 +6,8 @@ Follow `spec/openapi.json` exactly.
 
 - `backend/` owns every API route (`/slots`, `/bookings`, `/reset`).
 - `backend/src/http/` is public HTTP (`/`, `/health`, `/docs`). Spec routes live in `backend/src/modules/`. Do not use a `web/` folder (that name means UI in Express apps).
-- `frontend/` is Next.js UI only. Do not add Route Handlers for the spec.
-- Frontend and backend are two URLs. The UI calls `NEXT_PUBLIC_API_BASE`.
+- `frontend/` is Next.js UI. Spec routes stay on Express. The page calls same-origin `app/api` routes that attach `X-API-Key`; do not reimplement bookings there.
+- Two hosts. Checkers and `/docs` call the Express URL with `X-API-Key`. The browser does not.
 - `packages/shared/` holds types and Zod. Split by file (`slots.ts`, `bookings.ts`, `forms.ts`); `index.ts` only re-exports. Do not grow a god `index.ts`. The backend must import those contract types from `@willow/shared`, not duplicate them.
 - Database schema lives in `backend/src/infrastructure/migrations/`. Add a new numbered `.sql` file; do not edit applied migrations.
 - `Store` is async. Postgres when `DATABASE_URL` is set; SQLite otherwise. Parameterized SQL (`pg` `$1`, SQLite `?`) is intentional at this size. An ORM (Prisma/Drizzle) is the usual step if the schema grows; do not add one now.

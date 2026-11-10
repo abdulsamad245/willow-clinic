@@ -40,7 +40,7 @@ Do not commit secrets, change spec status codes, or put Route Handlers in Next.j
 
 ## Surfaces
 
-- Header: 5px leaf bar, clinic name.
+- Header: 5px leaf bar, square willow mark, clinic name. Favicon matches the mark.
 - Slot board: doctor filter, day chips, Grid/List.
 - Book sheet: name, email, appointment, booked time, booking id.
 - Lookup: one search (booking id or email). Grid/List. Click a card to see booking details. The page chooses `GET /bookings/{id}` or `GET /bookings?email=` (cursor paging under the hood).

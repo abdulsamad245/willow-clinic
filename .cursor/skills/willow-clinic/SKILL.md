@@ -11,8 +11,8 @@ Read `AGENTS.md` and `spec/openapi.json` before writing code. Do not invent rout
 
 - `backend/` owns `/slots`, `/bookings`, `/reset`. No `/api` prefix.
 - Public HTTP (`/`, `/health`, `/docs`) lives in `backend/src/http/`. Spec routes live in `modules/`. Do not add `src/web/` (that name means UI).
-- `frontend/` is Next.js UI only. No Route Handlers for those paths.
-- Two hosts. UI calls `NEXT_PUBLIC_API_BASE` with `X-API-Key`.
+- `frontend/` is Next.js UI. `app/api` routes attach `X-API-Key` and forward to Express. Do not reimplement bookings there.
+- Two hosts. Checkers call the Express URL with `X-API-Key`. The page does not.
 - Shared types and Zod live in `packages/shared/` (`slots.ts`, `bookings.ts`, `forms.ts`, `email.ts`). `index.ts` re-exports only. Use `BookingStatus` and `isValidEmail` from there. Do not duplicate those types in the backend. Do not use TypeScript `enum`.
 - Schema changes go in `backend/src/infrastructure/migrations/` as a new numbered `.sql` file.
 - Postgres when `DATABASE_URL` is set. `npm test` is SQLite. `npm run test:postgres` uses Testcontainers (Docker). Local Postgres: `npm run db`. `npm run seed` replaces the sample timetable and 12 bookings for `ada@example.com`. Keep `Store` async. Parameterized SQL is intentional at this size; do not add Prisma/Drizzle unless the schema grows.
@@ -38,5 +38,5 @@ Read `AGENTS.md` and `spec/openapi.json` before writing code. Do not invent rout
 
 ## Do not
 
-- Put booking API routes in Next.js.
+- Reimplement `/slots` or `/bookings` in Next.js. Forwarding from `app/api` routes is fine.
 - Change status codes to look more RESTful.

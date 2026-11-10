@@ -11,6 +11,7 @@ import {
 import type { Booking, SlotWithAvailability } from "@willow/shared";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { BookSheet } from "@/components/BookSheet";
+import { ClinicMark } from "@/components/ClinicMark";
 import { LookupPanel } from "@/components/LookupPanel";
 import { SlotBoard, type DayGroup } from "@/components/SlotBoard";
 import { cancelBooking, createBooking, getBooking, listBookings, listSlots } from "@/lib/api";
@@ -156,7 +157,7 @@ export function BookingApp({ initialView = "book" }: { initialView?: "book" | "l
       setSelected(null);
       setName("");
       setEmail("");
-      toast("Your appointment is confirmed.");
+      toast("Your appointment is confirmed successfully.");
       await refresh();
     } catch (err) {
       const message = userMessage(err, "We could not complete that booking. Please try again.");
@@ -246,7 +247,7 @@ export function BookingApp({ initialView = "book" }: { initialView?: "book" | "l
     try {
       const cancelled = await cancelBooking(id);
       setLookupResults((rows) => rows.map((row) => (row.id === id ? cancelled : row)));
-      toast("Your booking has been cancelled.");
+      toast("Your booking has been cancelled successfully.");
       await refresh();
     } catch (err) {
       const message = userMessage(err, "We could not cancel that booking. Please try again.");
@@ -260,7 +261,7 @@ export function BookingApp({ initialView = "book" }: { initialView?: "book" | "l
   async function copyId(id: string) {
     try {
       await navigator.clipboard.writeText(id);
-      toast("Booking id copied.");
+      toast("Booking id copied successfully.");
     } catch {
       toast("We could not copy that booking id. Please copy it manually.", "error");
     }
@@ -268,10 +269,13 @@ export function BookingApp({ initialView = "book" }: { initialView?: "book" | "l
 
   return (
     <div className="mx-auto w-full max-w-[1080px] px-4 py-6 sm:px-6 sm:py-8 pb-24">
-      <header className="mb-8 flex flex-col gap-4 border-b border-[#cfc6b8] pb-5 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-sm text-leaf">Family practice, Yaba, Lagos</p>
-          <h1 className="font-serif text-[2rem] font-semibold leading-none tracking-tight sm:text-4xl">Willow Clinic</h1>
+      <header className="mb-8 flex flex-col gap-4 border-b border-[#cfc6b8] pb-5 sm:mb-10 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <ClinicMark className="h-11 w-11 shrink-0" />
+          <div>
+            <p className="text-sm text-leaf">Family practice, Yaba, Lagos</p>
+            <h1 className="font-serif text-[2rem] font-semibold leading-none tracking-tight sm:text-4xl">Willow Clinic</h1>
+          </div>
         </div>
         <nav className="flex gap-5 text-sm sm:gap-6" aria-label="Primary">
           <button

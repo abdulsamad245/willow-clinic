@@ -1,12 +1,13 @@
 import { describe, it } from "node:test";
 
 const baseUrl = process.env.BASE_URL;
+const apiKey = process.env.API_KEY;
 
-describe("live e2e", { skip: !baseUrl }, () => {
-  it("requires BASE_URL before hitting a deployed API", async () => {
-    if (!baseUrl) return;
+describe("live e2e", { skip: !baseUrl || !apiKey }, () => {
+  it("requires BASE_URL and API_KEY before hitting a deployed API", async () => {
+    if (!baseUrl || !apiKey) return;
     const res = await fetch(`${baseUrl}/slots`, {
-      headers: { "X-API-Key": process.env.API_KEY || "koya_c4_willow_9e2b7f4a" },
+      headers: { "X-API-Key": apiKey },
     });
     if (!res.ok) {
       throw new Error(`live /slots returned ${res.status}`);

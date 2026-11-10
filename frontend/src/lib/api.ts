@@ -2,22 +2,10 @@ import type { Booking, SlotWithAvailability } from "@willow/shared";
 
 export type ApiError = Error & { status?: number };
 
-const API_BASE = String(process.env.NEXT_PUBLIC_API_BASE ?? "").replace(/\/$/, "");
-
-async function apiKey(): Promise<string> {
-  if (typeof window !== "undefined" && window.APP?.apiKey) return window.APP.apiKey;
-  const res = await fetch(`${API_BASE}/config.json`);
-  if (!res.ok) return "";
-  const data = (await res.json()) as { apiKey?: string };
-  return data.apiKey ?? "";
-}
-
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const key = await apiKey();
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await fetch(`/api${path}`, {
     ...init,
     headers: {
-      "X-API-Key": key,
       ...(init.body ? { "Content-Type": "application/json" } : {}),
       ...(init.headers ?? {}),
     },
@@ -52,10 +40,4 @@ export function listBookings(email: string, cursor?: string | null) {
 
 export function cancelBooking(id: string) {
   return request<Booking>(`/bookings/${encodeURIComponent(id)}`, { method: "DELETE" });
-}
-
-declare global {
-  interface Window {
-    APP?: { apiKey: string };
-  }
 }

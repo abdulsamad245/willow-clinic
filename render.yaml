@@ -9,7 +9,7 @@ services:
       - key: NODE_VERSION
         value: "22"
       - key: API_KEY
-        value: koya_c4_willow_9e2b7f4a
+        sync: false
       - key: DB_PATH
         value: /opt/render/project/src/data/clinic.db
       - key: DATABASE_URL

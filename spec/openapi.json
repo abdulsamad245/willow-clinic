@@ -177,6 +177,561 @@
           }
          }
         }
+       },
+       "examples": {
+        "seed": {
+         "summary": "Sample timetable (same slots as npm run seed). Wipes bookings.",
+         "value": {
+          "slots": [
+           {
+            "id": "s1",
+            "provider": "Dr Ade",
+            "start": "2026-12-10T09:00:00Z",
+            "end": "2026-12-10T09:30:00Z"
+           },
+           {
+            "id": "s2",
+            "provider": "Dr Ade",
+            "start": "2026-12-10T10:00:00Z",
+            "end": "2026-12-10T10:30:00Z"
+           },
+           {
+            "id": "s3",
+            "provider": "Dr Ade",
+            "start": "2026-12-10T11:00:00Z",
+            "end": "2026-12-10T11:30:00Z"
+           },
+           {
+            "id": "s4",
+            "provider": "Dr Ade",
+            "start": "2026-12-10T13:00:00Z",
+            "end": "2026-12-10T13:30:00Z"
+           },
+           {
+            "id": "s5",
+            "provider": "Dr Ade",
+            "start": "2026-12-10T14:00:00Z",
+            "end": "2026-12-10T14:30:00Z"
+           },
+           {
+            "id": "s6",
+            "provider": "Dr Ade",
+            "start": "2026-12-10T15:00:00Z",
+            "end": "2026-12-10T15:30:00Z"
+           },
+           {
+            "id": "s7",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-10T09:10:00Z",
+            "end": "2026-12-10T09:40:00Z"
+           },
+           {
+            "id": "s8",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-10T10:10:00Z",
+            "end": "2026-12-10T10:40:00Z"
+           },
+           {
+            "id": "s9",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-10T11:10:00Z",
+            "end": "2026-12-10T11:40:00Z"
+           },
+           {
+            "id": "s10",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-10T13:10:00Z",
+            "end": "2026-12-10T13:40:00Z"
+           },
+           {
+            "id": "s11",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-10T14:10:00Z",
+            "end": "2026-12-10T14:40:00Z"
+           },
+           {
+            "id": "s12",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-10T15:10:00Z",
+            "end": "2026-12-10T15:40:00Z"
+           },
+           {
+            "id": "s13",
+            "provider": "Dr Tunde",
+            "start": "2026-12-10T09:20:00Z",
+            "end": "2026-12-10T09:50:00Z"
+           },
+           {
+            "id": "s14",
+            "provider": "Dr Tunde",
+            "start": "2026-12-10T10:20:00Z",
+            "end": "2026-12-10T10:50:00Z"
+           },
+           {
+            "id": "s15",
+            "provider": "Dr Tunde",
+            "start": "2026-12-10T11:20:00Z",
+            "end": "2026-12-10T11:50:00Z"
+           },
+           {
+            "id": "s16",
+            "provider": "Dr Tunde",
+            "start": "2026-12-10T13:20:00Z",
+            "end": "2026-12-10T13:50:00Z"
+           },
+           {
+            "id": "s17",
+            "provider": "Dr Tunde",
+            "start": "2026-12-10T14:20:00Z",
+            "end": "2026-12-10T14:50:00Z"
+           },
+           {
+            "id": "s18",
+            "provider": "Dr Tunde",
+            "start": "2026-12-10T15:20:00Z",
+            "end": "2026-12-10T15:50:00Z"
+           },
+           {
+            "id": "s19",
+            "provider": "Dr Ade",
+            "start": "2026-12-11T09:00:00Z",
+            "end": "2026-12-11T09:30:00Z"
+           },
+           {
+            "id": "s20",
+            "provider": "Dr Ade",
+            "start": "2026-12-11T10:00:00Z",
+            "end": "2026-12-11T10:30:00Z"
+           },
+           {
+            "id": "s21",
+            "provider": "Dr Ade",
+            "start": "2026-12-11T11:00:00Z",
+            "end": "2026-12-11T11:30:00Z"
+           },
+           {
+            "id": "s22",
+            "provider": "Dr Ade",
+            "start": "2026-12-11T13:00:00Z",
+            "end": "2026-12-11T13:30:00Z"
+           },
+           {
+            "id": "s23",
+            "provider": "Dr Ade",
+            "start": "2026-12-11T14:00:00Z",
+            "end": "2026-12-11T14:30:00Z"
+           },
+           {
+            "id": "s24",
+            "provider": "Dr Ade",
+            "start": "2026-12-11T15:00:00Z",
+            "end": "2026-12-11T15:30:00Z"
+           },
+           {
+            "id": "s25",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-11T09:10:00Z",
+            "end": "2026-12-11T09:40:00Z"
+           },
+           {
+            "id": "s26",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-11T10:10:00Z",
+            "end": "2026-12-11T10:40:00Z"
+           },
+           {
+            "id": "s27",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-11T11:10:00Z",
+            "end": "2026-12-11T11:40:00Z"
+           },
+           {
+            "id": "s28",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-11T13:10:00Z",
+            "end": "2026-12-11T13:40:00Z"
+           },
+           {
+            "id": "s29",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-11T14:10:00Z",
+            "end": "2026-12-11T14:40:00Z"
+           },
+           {
+            "id": "s30",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-11T15:10:00Z",
+            "end": "2026-12-11T15:40:00Z"
+           },
+           {
+            "id": "s31",
+            "provider": "Dr Tunde",
+            "start": "2026-12-11T09:20:00Z",
+            "end": "2026-12-11T09:50:00Z"
+           },
+           {
+            "id": "s32",
+            "provider": "Dr Tunde",
+            "start": "2026-12-11T10:20:00Z",
+            "end": "2026-12-11T10:50:00Z"
+           },
+           {
+            "id": "s33",
+            "provider": "Dr Tunde",
+            "start": "2026-12-11T11:20:00Z",
+            "end": "2026-12-11T11:50:00Z"
+           },
+           {
+            "id": "s34",
+            "provider": "Dr Tunde",
+            "start": "2026-12-11T13:20:00Z",
+            "end": "2026-12-11T13:50:00Z"
+           },
+           {
+            "id": "s35",
+            "provider": "Dr Tunde",
+            "start": "2026-12-11T14:20:00Z",
+            "end": "2026-12-11T14:50:00Z"
+           },
+           {
+            "id": "s36",
+            "provider": "Dr Tunde",
+            "start": "2026-12-11T15:20:00Z",
+            "end": "2026-12-11T15:50:00Z"
+           },
+           {
+            "id": "s37",
+            "provider": "Dr Ade",
+            "start": "2026-12-12T09:00:00Z",
+            "end": "2026-12-12T09:30:00Z"
+           },
+           {
+            "id": "s38",
+            "provider": "Dr Ade",
+            "start": "2026-12-12T10:00:00Z",
+            "end": "2026-12-12T10:30:00Z"
+           },
+           {
+            "id": "s39",
+            "provider": "Dr Ade",
+            "start": "2026-12-12T11:00:00Z",
+            "end": "2026-12-12T11:30:00Z"
+           },
+           {
+            "id": "s40",
+            "provider": "Dr Ade",
+            "start": "2026-12-12T13:00:00Z",
+            "end": "2026-12-12T13:30:00Z"
+           },
+           {
+            "id": "s41",
+            "provider": "Dr Ade",
+            "start": "2026-12-12T14:00:00Z",
+            "end": "2026-12-12T14:30:00Z"
+           },
+           {
+            "id": "s42",
+            "provider": "Dr Ade",
+            "start": "2026-12-12T15:00:00Z",
+            "end": "2026-12-12T15:30:00Z"
+           },
+           {
+            "id": "s43",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-12T09:10:00Z",
+            "end": "2026-12-12T09:40:00Z"
+           },
+           {
+            "id": "s44",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-12T10:10:00Z",
+            "end": "2026-12-12T10:40:00Z"
+           },
+           {
+            "id": "s45",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-12T11:10:00Z",
+            "end": "2026-12-12T11:40:00Z"
+           },
+           {
+            "id": "s46",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-12T13:10:00Z",
+            "end": "2026-12-12T13:40:00Z"
+           },
+           {
+            "id": "s47",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-12T14:10:00Z",
+            "end": "2026-12-12T14:40:00Z"
+           },
+           {
+            "id": "s48",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-12T15:10:00Z",
+            "end": "2026-12-12T15:40:00Z"
+           },
+           {
+            "id": "s49",
+            "provider": "Dr Tunde",
+            "start": "2026-12-12T09:20:00Z",
+            "end": "2026-12-12T09:50:00Z"
+           },
+           {
+            "id": "s50",
+            "provider": "Dr Tunde",
+            "start": "2026-12-12T10:20:00Z",
+            "end": "2026-12-12T10:50:00Z"
+           },
+           {
+            "id": "s51",
+            "provider": "Dr Tunde",
+            "start": "2026-12-12T11:20:00Z",
+            "end": "2026-12-12T11:50:00Z"
+           },
+           {
+            "id": "s52",
+            "provider": "Dr Tunde",
+            "start": "2026-12-12T13:20:00Z",
+            "end": "2026-12-12T13:50:00Z"
+           },
+           {
+            "id": "s53",
+            "provider": "Dr Tunde",
+            "start": "2026-12-12T14:20:00Z",
+            "end": "2026-12-12T14:50:00Z"
+           },
+           {
+            "id": "s54",
+            "provider": "Dr Tunde",
+            "start": "2026-12-12T15:20:00Z",
+            "end": "2026-12-12T15:50:00Z"
+           },
+           {
+            "id": "s55",
+            "provider": "Dr Ade",
+            "start": "2026-12-14T09:00:00Z",
+            "end": "2026-12-14T09:30:00Z"
+           },
+           {
+            "id": "s56",
+            "provider": "Dr Ade",
+            "start": "2026-12-14T10:00:00Z",
+            "end": "2026-12-14T10:30:00Z"
+           },
+           {
+            "id": "s57",
+            "provider": "Dr Ade",
+            "start": "2026-12-14T11:00:00Z",
+            "end": "2026-12-14T11:30:00Z"
+           },
+           {
+            "id": "s58",
+            "provider": "Dr Ade",
+            "start": "2026-12-14T13:00:00Z",
+            "end": "2026-12-14T13:30:00Z"
+           },
+           {
+            "id": "s59",
+            "provider": "Dr Ade",
+            "start": "2026-12-14T14:00:00Z",
+            "end": "2026-12-14T14:30:00Z"
+           },
+           {
+            "id": "s60",
+            "provider": "Dr Ade",
+            "start": "2026-12-14T15:00:00Z",
+            "end": "2026-12-14T15:30:00Z"
+           },
+           {
+            "id": "s61",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-14T09:10:00Z",
+            "end": "2026-12-14T09:40:00Z"
+           },
+           {
+            "id": "s62",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-14T10:10:00Z",
+            "end": "2026-12-14T10:40:00Z"
+           },
+           {
+            "id": "s63",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-14T11:10:00Z",
+            "end": "2026-12-14T11:40:00Z"
+           },
+           {
+            "id": "s64",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-14T13:10:00Z",
+            "end": "2026-12-14T13:40:00Z"
+           },
+           {
+            "id": "s65",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-14T14:10:00Z",
+            "end": "2026-12-14T14:40:00Z"
+           },
+           {
+            "id": "s66",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-14T15:10:00Z",
+            "end": "2026-12-14T15:40:00Z"
+           },
+           {
+            "id": "s67",
+            "provider": "Dr Tunde",
+            "start": "2026-12-14T09:20:00Z",
+            "end": "2026-12-14T09:50:00Z"
+           },
+           {
+            "id": "s68",
+            "provider": "Dr Tunde",
+            "start": "2026-12-14T10:20:00Z",
+            "end": "2026-12-14T10:50:00Z"
+           },
+           {
+            "id": "s69",
+            "provider": "Dr Tunde",
+            "start": "2026-12-14T11:20:00Z",
+            "end": "2026-12-14T11:50:00Z"
+           },
+           {
+            "id": "s70",
+            "provider": "Dr Tunde",
+            "start": "2026-12-14T13:20:00Z",
+            "end": "2026-12-14T13:50:00Z"
+           },
+           {
+            "id": "s71",
+            "provider": "Dr Tunde",
+            "start": "2026-12-14T14:20:00Z",
+            "end": "2026-12-14T14:50:00Z"
+           },
+           {
+            "id": "s72",
+            "provider": "Dr Tunde",
+            "start": "2026-12-14T15:20:00Z",
+            "end": "2026-12-14T15:50:00Z"
+           },
+           {
+            "id": "s73",
+            "provider": "Dr Ade",
+            "start": "2026-12-15T09:00:00Z",
+            "end": "2026-12-15T09:30:00Z"
+           },
+           {
+            "id": "s74",
+            "provider": "Dr Ade",
+            "start": "2026-12-15T10:00:00Z",
+            "end": "2026-12-15T10:30:00Z"
+           },
+           {
+            "id": "s75",
+            "provider": "Dr Ade",
+            "start": "2026-12-15T11:00:00Z",
+            "end": "2026-12-15T11:30:00Z"
+           },
+           {
+            "id": "s76",
+            "provider": "Dr Ade",
+            "start": "2026-12-15T13:00:00Z",
+            "end": "2026-12-15T13:30:00Z"
+           },
+           {
+            "id": "s77",
+            "provider": "Dr Ade",
+            "start": "2026-12-15T14:00:00Z",
+            "end": "2026-12-15T14:30:00Z"
+           },
+           {
+            "id": "s78",
+            "provider": "Dr Ade",
+            "start": "2026-12-15T15:00:00Z",
+            "end": "2026-12-15T15:30:00Z"
+           },
+           {
+            "id": "s79",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-15T09:10:00Z",
+            "end": "2026-12-15T09:40:00Z"
+           },
+           {
+            "id": "s80",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-15T10:10:00Z",
+            "end": "2026-12-15T10:40:00Z"
+           },
+           {
+            "id": "s81",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-15T11:10:00Z",
+            "end": "2026-12-15T11:40:00Z"
+           },
+           {
+            "id": "s82",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-15T13:10:00Z",
+            "end": "2026-12-15T13:40:00Z"
+           },
+           {
+            "id": "s83",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-15T14:10:00Z",
+            "end": "2026-12-15T14:40:00Z"
+           },
+           {
+            "id": "s84",
+            "provider": "Dr Nkechi",
+            "start": "2026-12-15T15:10:00Z",
+            "end": "2026-12-15T15:40:00Z"
+           },
+           {
+            "id": "s85",
+            "provider": "Dr Tunde",
+            "start": "2026-12-15T09:20:00Z",
+            "end": "2026-12-15T09:50:00Z"
+           },
+           {
+            "id": "s86",
+            "provider": "Dr Tunde",
+            "start": "2026-12-15T10:20:00Z",
+            "end": "2026-12-15T10:50:00Z"
+           },
+           {
+            "id": "s87",
+            "provider": "Dr Tunde",
+            "start": "2026-12-15T11:20:00Z",
+            "end": "2026-12-15T11:50:00Z"
+           },
+           {
+            "id": "s88",
+            "provider": "Dr Tunde",
+            "start": "2026-12-15T13:20:00Z",
+            "end": "2026-12-15T13:50:00Z"
+           },
+           {
+            "id": "s89",
+            "provider": "Dr Tunde",
+            "start": "2026-12-15T14:20:00Z",
+            "end": "2026-12-15T14:50:00Z"
+           },
+           {
+            "id": "s90",
+            "provider": "Dr Tunde",
+            "start": "2026-12-15T15:20:00Z",
+            "end": "2026-12-15T15:50:00Z"
+           }
+          ]
+         }
+        },
+        "clear": {
+         "summary": "Clear slots, bookings, idempotency keys, and rate attempts.",
+         "value": {
+          "slots": []
+         }
+        }
        }
       }
      }

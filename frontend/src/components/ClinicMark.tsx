@@ -1,0 +1,12 @@
+export function ClinicMark({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" fill="#2c5a38" />
+      <path
+        fill="#f3efe6"
+        d="M16 4.5c.4 0 .8.3 2.4 2.6 1.9 2.7 5.1 7.2 5.1 11.6 0 4.2-3.1 7.2-7.5 7.2s-7.5-3-7.5-7.2c0-4.4 3.2-8.9 5.1-11.6C15.2 4.8 15.6 4.5 16 4.5z"
+      />
+      <path fill="none" stroke="#2c5a38" strokeLinecap="round" strokeWidth="1.5" d="M16 9.2v13.4" />
+    </svg>
+  );
+}

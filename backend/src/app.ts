@@ -45,7 +45,7 @@ export function createApp({ store, apiKey, clock = () => new Date() }: CreateApp
       autoLogging: {
         ignore: (req) => {
           const url = req.url ?? "";
-          return url === "/health" || url === "/config.json" || url === "/openapi.json" || url.startsWith("/docs");
+          return url === "/health" || url === "/openapi.json" || url.startsWith("/docs");
         },
       },
     })
@@ -61,7 +61,7 @@ export function createApp({ store, apiKey, clock = () => new Date() }: CreateApp
   );
   app.use(invalidJson);
 
-  mountPublicRoutes(app, apiKey);
+  mountPublicRoutes(app);
   mountDocs(app);
   app.use(requireApiKey(apiKey));
 
