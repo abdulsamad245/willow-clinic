@@ -270,12 +270,12 @@ export function BookingApp({ initialView = "book" }: { initialView?: "book" | "l
   return (
     <div className="mx-auto w-full max-w-[1080px] px-4 py-6 sm:px-6 sm:py-8 pb-24">
       <header className="mb-8 flex flex-col gap-4 border-b border-[#cfc6b8] pb-5 sm:mb-10 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <ClinicMark className="h-11 w-11 shrink-0" />
-          <div>
-            <p className="text-sm text-leaf">Family practice, Yaba, Lagos</p>
+        <div>
+          <div className="flex items-center gap-3">
+            <ClinicMark className="size-8 shrink-0 sm:size-9" />
             <h1 className="font-serif text-[2rem] font-semibold leading-none tracking-tight sm:text-4xl">Willow Clinic</h1>
           </div>
+          <p className="mt-1 pl-11 text-sm text-leaf sm:pl-12">Family practice, Yaba, Lagos</p>
         </div>
         <nav className="flex gap-5 text-sm sm:gap-6" aria-label="Primary">
           <button
