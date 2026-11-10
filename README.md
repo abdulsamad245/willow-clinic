@@ -129,7 +129,7 @@ Two URLs, same as local.
 | Piece | Where | What to set |
 |---|---|---|
 | API | [Render](https://render.com) (`render.yaml`) | `API_KEY`, `DATABASE_URL` from a Render Postgres instance, `FRONTEND_ORIGIN` to the page URL |
-| Page | [Vercel](https://vercel.com) | `NEXT_PUBLIC_API_BASE` to the Render API URL, then build |
+| Page | [Vercel](https://vercel.com) | Import **frontend** only (not the Express app or the container). Root Directory `frontend`. Install: `cd .. && npm install`. Turn on **Include source files outside of the Root Directory**. `NEXT_PUBLIC_API_BASE` = the Render API URL (no trailing slash), then build |
 
 Do not commit `.env` files. SQLite `DB_PATH` on Render does not survive deploys; use Postgres there.
 
