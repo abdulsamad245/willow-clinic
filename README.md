@@ -4,9 +4,7 @@ Willow Clinic is a booking API and a booking page: patients see open slots, book
 
 Backend is Express. Frontend is Next.js. Two URLs.
 
-Contract: [`spec/openapi.json`](spec/openapi.json). Spec routes need `X-API-Key`. Set `API_KEY` in `backend/.env` (not in git).
-
-The page talks to Next.js `/api/*` routes. Those add the key and call Express. Graders and `/docs` call the API host with the key.
+The page talks to Next.js `/api/*` routes. Those add the key and call Express. `/docs` and other API clients call Express with `X-API-Key`.
 
 ```mermaid
 flowchart LR
@@ -20,7 +18,27 @@ flowchart LR
   api --> db
 ```
 
-UI lives in `frontend/`. API lives in `backend/`. Shared Zod types live in `packages/shared/`.
+```mermaid
+flowchart TB
+  subgraph frontend["frontend/"]
+    ui[Page and forms]
+    routes["app/api routes"]
+  end
+  subgraph shared["packages/shared/"]
+    zod[Types and Zod]
+  end
+  subgraph backend["backend/src"]
+    http["http/ public routes and docs"]
+    modules["modules/ spec routes and services"]
+    store["infrastructure/ Postgres or SQLite"]
+  end
+
+  ui --> zod
+  ui --> routes
+  routes -->|API_BASE_URL and API_KEY| http
+  http --> modules --> store
+  modules --> zod
+```
 
 ## Run
 
@@ -28,58 +46,46 @@ Node 22+.
 
 ```bash
 npm install
-cp backend/.env.example backend/.env   # set API_KEY
+cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env.local
 npm test
 ```
 
-Terminal 1:
+Set `API_KEY` in `backend/.env`. Use the same value in `frontend/.env.local`.
 
 ```bash
-npm run dev
+npm run dev              # API  http://localhost:3001
+npm run dev:frontend     # page http://localhost:3000
 ```
 
-API: http://localhost:3001  
-Docs: http://localhost:3001/docs (Authorize with `X-API-Key` from `backend/.env`)
+Docs: http://localhost:3001/docs
 
-Terminal 2:
-
-```bash
-npm run dev:frontend
-```
-
-Page: http://localhost:3000
-
-`npm run dev` seeds the sample timetable if the store is empty. To reset later:
+Empty store: `npm run dev` loads demo slots. To reset:
 
 ```bash
 npm run seed
 ```
 
-That clears bookings, loads demo slots (Dr Ade, Dr Nkechi, Dr Tunde), and books 12 slots for `ada@example.com` so Load more works (page size 10). Uses SQLite in `backend/data` unless `DATABASE_URL` is set.
+Demo doctors: Dr Ade, Dr Nkechi, Dr Tunde. Twelve bookings for `ada@example.com` so Load more works.
 
-### Postgres locally
-
-Without `DATABASE_URL`, the API uses SQLite (`backend/data/clinic.db`, gitignored). Tests do not use that file.
+Postgres:
 
 ```bash
 npm run db
 ```
 
-Copy `DATABASE_URL` from `backend/.env.example` into `backend/.env`, then start `npm run dev` again. Stop Postgres with `npm run db:down`.
+Copy `DATABASE_URL` from `backend/.env.example` into `backend/.env`, then run `npm run dev` again. Stop with `npm run db:down`. Without it, the API uses SQLite at `backend/data/clinic.db`.
 
 ## Tests
 
 ```bash
-npm test                 # unit + SQLite HTTP, no Docker
-npm run test:postgres    # same HTTP contract on Testcontainers Postgres (needs Docker)
+npm test
+npm run test:postgres    # needs Docker
 ```
-
-CI runs both. `test:postgres` does not use `npm run db` or `backend/data`.
 
 ## API
 
-Spec routes need `X-API-Key`. `/`, `/health`, `/docs`, and `/openapi.json` do not.
+[`spec/openapi.json`](spec/openapi.json). Spec routes need `X-API-Key`. `/`, `/health`, `/docs`, and `/openapi.json` do not.
 
 | Method | Path | What |
 |---|---|---|
@@ -96,29 +102,19 @@ Errors: `{ "error": "..." }`.
 
 | Piece | Host | Env |
 |---|---|---|
-| API | Render (`render.yaml`) | `API_KEY`, `DATABASE_URL` (Postgres), `FRONTEND_ORIGIN` = page URL |
-| Page | Vercel, import `frontend` only | Root Directory `frontend`. Include source files outside the root. Install: `cd .. && npm install`. `API_BASE_URL` = Render URL (no trailing slash). `API_KEY` = same as Render (not `NEXT_PUBLIC_`) |
+| API | Render (`render.yaml`) | `API_KEY`, `DATABASE_URL`, `FRONTEND_ORIGIN` |
+| Page | Vercel (`frontend/` only) | `API_BASE_URL`, `API_KEY`. Root Directory `frontend`. Include files outside the root. Install: `cd .. && npm install` |
 
-Do not commit `.env` files. Do not use SQLite on Render.
+Postgres on Render. Do not commit `.env` files.
 
 ## Config
 
-Backend (`backend/.env`):
-
-| Env | Default |
-|---|---|
-| `PORT` | `3001` |
-| `API_KEY` | required |
-| `DB_PATH` | `./data/clinic.db` (when `DATABASE_URL` is unset) |
-| `DATABASE_URL` | empty (set for Postgres) |
-| `FRONTEND_ORIGIN` | `*` |
-| `LOG_LEVEL` | `info` (`silent` during tests) |
-
-Frontend (`frontend/.env.local`):
-
-| Env | Default |
-|---|---|
-| `API_BASE_URL` | Express URL |
-| `API_KEY` | same as backend `API_KEY` |
-
-The browser never sees the key.
+| Env | Where | Default |
+|---|---|---|
+| `PORT` | backend | `3001` |
+| `API_KEY` | backend and frontend | required |
+| `DB_PATH` | backend | `./data/clinic.db` |
+| `DATABASE_URL` | backend | empty (Postgres when set) |
+| `FRONTEND_ORIGIN` | backend | `*` |
+| `LOG_LEVEL` | backend | `info` |
+| `API_BASE_URL` | frontend | Express URL |
