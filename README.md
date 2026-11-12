@@ -1,13 +1,23 @@
 # Willow Clinic
 
-Clinic booking API (Express) and booking page (Next.js). Two URLs.
+Willow Clinic is a booking API and a booking page: patients see open slots, book one, and get a confirmation.
+
+Backend is Express. Frontend is Next.js. Two URLs.
 
 Contract: [`spec/openapi.json`](spec/openapi.json). Spec routes need `X-API-Key`. Set `API_KEY` in `backend/.env` (not in git).
 
 The page talks to Next.js `/api/*` routes. Those add the key and call Express. Graders and `/docs` call the API host with the key.
 
-```
-browser -> Next.js page + /api  ->  Express  ->  Postgres or SQLite
+```mermaid
+flowchart LR
+  user[Browser]
+  web[Frontend Next.js]
+  api[Backend Express]
+  db[(Postgres or SQLite)]
+
+  user -->|page and /api| web
+  web -->|JSON and X-API-Key| api
+  api --> db
 ```
 
 UI lives in `frontend/`. API lives in `backend/`. Shared Zod types live in `packages/shared/`.
