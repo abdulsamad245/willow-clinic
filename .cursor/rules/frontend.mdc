@@ -6,4 +6,4 @@ alwaysApply: false
 
 # Frontend
 
-Next.js must not implement `/slots`, `/bookings`, or `/reset`. The page `fetch`es same-origin `/api/slots` and `/api/bookings`; those App Router routes attach `X-API-Key` and forward to Express. Do not send the key from the browser. Validate forms with shared Zod for UX; the API still decides. Keep the UI responsive and labelled. User-facing copy is polite clinic English; map spec API error strings in `lib/errors.ts` — do not change the API messages.
+Next.js must not implement `/slots`, `/bookings`, or `/reset`. The page `fetch`es same-origin `/api/slots` and `/api/bookings`; those App Router routes attach `X-API-Key` and forward to Express. Do not send the key from the browser. Validate forms with shared Zod for UX; the API still decides. Keep the UI responsive and labelled. User-facing copy is polite clinic English; map spec API error strings in `lib/errors.ts`. Do not change the API messages.

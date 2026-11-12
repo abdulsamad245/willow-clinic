@@ -5,9 +5,9 @@ alwaysApply: true
 
 # Verify
 
-- `npm test` — unit + SQLite HTTP e2e
-- `npm run test:postgres` — same contract on Docker/Testcontainers
-- `npm run typecheck` — after a series of backend edits
-- `npm run build` — frontend
+- `npm test`: unit + SQLite HTTP e2e
+- `npm run test:postgres`: same contract on Docker/Testcontainers
+- `npm run typecheck`: after a series of backend edits
+- `npm run build`: frontend
 
 Do not commit `.env`. After a behaviour change: tests, then `/review` or `/review-security`.

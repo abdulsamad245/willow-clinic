@@ -1,4 +1,4 @@
-# Willow Clinic — design and agent workflow
+# Willow Clinic design and agent workflow
 
 Willow is a clinic booking page on a strict OpenAPI API. Calm paper, leaf green, short copy. The repo tells the agent the contract; tests and reviews check the work.
 
@@ -10,7 +10,7 @@ spec/openapi.json  →  AGENTS.md + rules + skill  →  implement  →  npm test
 
 | Step | What |
 |---|---|
-| Spec | `spec/openapi.json` — do not restyle paths or status codes |
+| Spec | `spec/openapi.json`. Do not restyle paths or status codes |
 | Repo law | `AGENTS.md`, `.cursor/rules/*.mdc`, `.cursor/skills/willow-clinic/SKILL.md` |
 | Prove | `npm test` (SQLite) then `npm run test:postgres` (Testcontainers) |
 | Review | `/review` (Bugbot) or `/review-security` after a behaviour change |
@@ -31,8 +31,8 @@ Do not commit secrets, change spec status codes, or put Route Handlers in Next.j
 | Ink | `ink` | `#1c2418` | Body text |
 | Leaf | `leaf` | `#2c5a38` | Brand bar, actions, focus |
 | Paper | `paper` | `#f3efe6` | Cards and fields |
-| Page | — | `#f1ebe0` | Page wash |
-| Skeleton | — | `#e4dccf` | Loading placeholders |
+| Page | | `#f1ebe0` | Page wash |
+| Skeleton | | `#e4dccf` | Loading placeholders |
 
 - Display: **Fraunces**. Body: **Source Sans 3**.
 - Custom dropdowns, not native `<select>`.
